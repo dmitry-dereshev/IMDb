@@ -16,11 +16,12 @@ def tsv_to_csv_pandas(data_in, data_out):
     for i in tsv_files:
         data = pd.read_csv(i, sep='\t')
         data.replace('\\N', '', inplace=True)
+        print(os.path.basename(i))
         print(data.dtypes)
         save_to = data_out+'\\'+os.path.basename(i)
         data.to_csv(save_to, index=0)
 
 
-data_in = 'D:\Downloads\IMBD\.tsv files'
-data_out = 'D:\Downloads\IMBD\.tsv files\.csv files'
+data_in = 'path/to/folder/with/.tsv'
+data_out = 'path/to/desired/output/folder'
 tsv_to_csv_pandas(data_in, data_out)
