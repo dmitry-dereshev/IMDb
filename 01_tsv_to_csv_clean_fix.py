@@ -1,8 +1,9 @@
-# Part of IMDb project by Dmitry Dereshev
+# Part of IMDb project by Dmitry Dereshev. 2019 MIT Licence.
 # https://github.com/dmitry-dereshev/IMDb
 
 # This script looks through a folder to pick up .tsv files, remove '\N', and
 # convert them to Unicode-compliant .csv files.
+# Original data from: https://www.imdb.com/interfaces/
 
 import pandas as pd
 import os

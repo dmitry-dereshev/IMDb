@@ -1,3 +1,11 @@
+/*
+Part of IMDb project by Dmitry Dereshev. 2019 MIT Licence.
+https://github.com/dmitry-dereshev/IMDb
+
+This SQL query creates 7 tables to correspond to the tables cleaned by 
+01_tsv_to_csv_clean_fix.py
+*/
+
 CREATE TABLE ACTOR_INFO 
 --Table for name.basics 
 ( PERSON_ID VARCHAR, FULL_NAME VARCHAR, BIRTH_YEAR FLOAT, DEATH_YEAR FLOAT, PROFESSION VARCHAR, KNOWN_FOR_TITLES VARCHAR ) ;
