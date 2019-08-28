@@ -1,3 +1,11 @@
+/*
+Part of IMDb project by Dmitry Dereshev. 2019 MIT Licence.
+https://github.com/dmitry-dereshev/IMDb
+
+This SQL query populates the 7 tables created by 02_create_tables.sql with the
+data cleaned up by 01_tsv_to_csv_clean_fix.py
+*/
+
 COPY ACTOR_INFO
 FROM 'path\to\name.basics.csv' DELIMITER ',' CSV HEADER;
 
