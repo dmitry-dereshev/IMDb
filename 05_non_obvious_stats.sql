@@ -1,3 +1,10 @@
+/*
+Part of IMDb project by Dmitry Dereshev. 2019 MIT Licence.
+https://github.com/dmitry-dereshev/IMDb
+
+This SQL query showcases some stats about IMDb and what it contains.
+*/
+
 -- Top 10 Films of all time
     SELECT DISTINCT TF.title_original_name, TR.average_rating, TR.number_of_votes
     FROM TITLE_INFO as TF, TITLE_RATINGS as TR
@@ -6,7 +13,6 @@
     AND title_format = 'movie'
     ORDER BY TR.average_rating DESC
     LIMIT 10;
-
 -- Top 10 'Disaster of Cinematography' Films
     SELECT DISTINCT TF.title_original_name, TF.release_year, TR.average_rating, TR.number_of_votes
     FROM TITLE_INFO as TF, TITLE_RATINGS as TR
@@ -28,7 +34,6 @@
     ORDER BY num DESC
     LIMIT 10;
 -- The 10 types of films in the database
-
     SELECT DISTINCT COUNT(*) AS NUM, TITLE_FORMAT
     FROM TITLE_INFO
     GROUP BY title_format
