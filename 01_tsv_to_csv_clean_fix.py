@@ -20,7 +20,7 @@ def tsv_to_csv_pandas(data_in, data_out):
         print(os.path.basename(i))
         print(data.dtypes)
         save_to = data_out+'\\'+os.path.basename(i)
-        data.to_csv(save_to, index=0)
+        data.to_csv(save_to, index=False)
 
 def clean_name_basics(data_in, data_out):
     data = pd.read_csv(data_in,\
@@ -36,35 +36,41 @@ def clean_name_basics(data_in, data_out):
     print(data.head())
     data.to_csv(data_out, na_rep="",float_format="%.0f",index=False)
 
-def clean_title_principals(data_in, data_out):
-    data = pd.read_csv(data_in, usecols=['tconst','nconst','category'])
-    data.to_csv(data_out, index=False)
-
-def fix_title_akas(data_in, data_out):
+def clean_title_basics(data_in, data_out):
     data = pd.read_csv(data_in,\
-        usecols=['titleId', 'title', 'region', 'isOriginalTitle'])
-    data.dropna(subset=['region', 'isOriginalTitle'], inplace=True)
-    data.to_csv(data_out,na_rep="", float_format="%.0f", index=False)
-
-def fix_title_basics(data_in, data_out):
-    data = pd.read_csv(data_in,\
-        usecols=['tconst', 'titleType', 'originalTitle', 'isAdult',\
-             'startYear', 'runtimeMinutes'])
-    data = data[~data.runtimeMinutes.str.contains('Ani|Real', na=False)]
+        usecols=['tconst', 'originalTitle', 'titleType', 'startYear',\
+             'runtimeMinutes', 'isAdult'])
+    data.dropna(inplace=True)
+    data = data[['tconst', 'originalTitle', 'titleType', 'startYear',\
+             'runtimeMinutes', 'isAdult']]
     data.to_csv(data_out, na_rep="", float_format="%.0f", index=False)
 
-def make_media(data_1, data_2, data_out):
-    data_1 = pd.read_csv(data_1)
-    data_2 = pd.read_csv(data_2)
-    merged_data = data_1.merge(data_2, how='left', on='tconst')
-    merged_data = merged_data[['tconst', 'originalTitle', 'titleType',\
-         'startYear', 'runtimeMinutes', 'isAdult', 'averageRating', 'numVotes']]
-    merged_data.dropna(subset=['tconst', 'originalTitle', 'titleType',\
-        'startYear', 'isAdult', 'averageRating', 'numVotes'], inplace=True)
-    merged_data = merged_data.astype({'startYear': 'int64',\
-        'numVotes': 'int64'}, errors='ignore')
-    print(merged_data.dtypes)
-    merged_data.to_csv(data_out, na_rep="", index=False)
+def clean_title_principals(people, media, title_principals, data_out):
+    data = pd.read_csv(title_principals, usecols=['tconst','nconst','category'])
+    print(data.shape)
+    people_compare = pd.read_csv(people, usecols=['nconst'])
+    media_compare = pd.read_csv(media, usecols=['tconst'])
+    data = data[data.nconst.isin(people_compare.nconst)]
+    print(data.shape)
+    data = data[data.tconst.isin(media_compare.tconst)]
+    print(data.shape)
+    data.to_csv(data_out, index=False)
 
-data_in = 'path/to/csv'
-data_out = 'path/to/csv'
+def clean_title_akas(media, title_akas, data_out):
+    data = pd.read_csv(title_akas,\
+        usecols=['titleId', 'title', 'region', 'isOriginalTitle'])
+    print(data.head())
+    data.dropna(subset=['region', 'isOriginalTitle'], inplace=True)
+    print(data.shape)
+    compare_media = pd.read_csv(media, usecols=['tconst'])
+    data = data[data.titleId.isin(compare_media.tconst)]
+    print(data.shape)
+    data.to_csv(data_out,na_rep="", float_format="%.0f", index=False)
+
+def clean_ratings(media, title_ratings, data_out):
+    data = pd.read_csv(title_ratings)
+    compare_media = pd.read_csv(media, usecols=['tconst'])
+    print(data.shape)
+    data = data[data.tconst.isin(compare_media.tconst)]
+    print(data.shape)
+    data.to_csv(data_out,na_rep="", float_format="%.0f", index=False)
